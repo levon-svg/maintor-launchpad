@@ -4,6 +4,9 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
+/* ═══════════════════════════════════════════════════════
+   LAYER 1 — Foundational tokens
+   ═══════════════════════════════════════════════════════ */
 @layer base {
   :root {
     --background: 210 20% 98%;
@@ -36,7 +39,7 @@
 
     --radius: 0.75rem;
 
-    /* Custom tokens */
+    /* Custom design tokens */
     --navy: 220 60% 16%;
     --navy-light: 220 40% 24%;
     --sky: 213 94% 58%;
@@ -46,9 +49,11 @@
     --surface-elevated: 0 0% 100%;
     --gradient-hero: linear-gradient(135deg, hsl(220 60% 16%), hsl(220 40% 28%), hsl(213 60% 40%));
     --gradient-accent: linear-gradient(135deg, hsl(213 94% 58%), hsl(213 90% 68%));
+    --gradient-warm: linear-gradient(135deg, hsl(213 94% 58%), hsl(260 60% 58%));
     --shadow-card: 0 1px 3px hsl(220 30% 12% / 0.04), 0 4px 12px hsl(220 30% 12% / 0.06);
     --shadow-card-hover: 0 4px 12px hsl(220 30% 12% / 0.08), 0 12px 32px hsl(220 30% 12% / 0.1);
     --shadow-nav: 0 1px 3px hsl(220 30% 12% / 0.06);
+    --shadow-glow: 0 0 40px hsl(213 94% 58% / 0.15);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -61,22 +66,45 @@
   }
 }
 
+/* ═══════════════════════════════════════════════════════
+   LAYER 2 — Typography & base resets
+   ═══════════════════════════════════════════════════════ */
 @layer base {
   * {
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  }
+
+  ::selection {
+    background: hsl(213 94% 58% / 0.2);
+    color: hsl(220 30% 12%);
   }
 }
 
+/* ═══════════════════════════════════════════════════════
+   LAYER 3–6 — Components: containers, cards, buttons, nav
+   ═══════════════════════════════════════════════════════ */
 @layer components {
+
+  /* Layout / Container */
   .section-container {
     @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
   }
@@ -85,6 +113,7 @@
     @apply py-20 md:py-28;
   }
 
+  /* Typography scale */
   .heading-xl {
     @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1];
   }
@@ -101,6 +130,7 @@
     @apply text-base sm:text-lg leading-relaxed text-muted-foreground;
   }
 
+  /* Cards */
   .card-surface {
     @apply bg-card rounded-2xl border border-border;
     box-shadow: var(--shadow-card);
@@ -112,10 +142,21 @@
     transform: translateY(-2px);
   }
 
+  .card-surface-static {
+    @apply bg-card rounded-2xl border border-border;
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Buttons */
   .pill-button {
     @apply inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-medium transition-all duration-200;
   }
 
+  .pill-button:active {
+    transform: scale(0.97);
+  }
+
+  /* Gradient text */
   .gradient-text {
     background: var(--gradient-accent);
     -webkit-background-clip: text;
@@ -123,35 +164,209 @@
     background-clip: text;
   }
 
+  .gradient-text-warm {
+    background: var(--gradient-warm);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Navbar floating */
   .nav-floating {
     box-shadow: var(--shadow-nav);
-    backdrop-filter: blur(12px);
-    background: hsl(0 0% 100% / 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background: hsl(0 0% 100% / 0.88);
+  }
+
+  /* Scroll-reveal — hidden by default, revealed via JS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 {
+    transition-delay: 0.1s;
+  }
+
+  .reveal-delay-2 {
+    transition-delay: 0.2s;
+  }
+
+  .reveal-delay-3 {
+    transition-delay: 0.3s;
+  }
+
+  .reveal-delay-4 {
+    transition-delay: 0.4s;
+  }
+
+  .reveal-delay-5 {
+    transition-delay: 0.5s;
+  }
+
+  /* Horizontal scroller */
+  .scroll-row {
+    @apply flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scroll-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scroll-row>* {
+    @apply snap-start flex-shrink-0;
+  }
+
+  /* Glow effect */
+  .glow-ring {
+    position: relative;
+  }
+
+  .glow-ring::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: var(--gradient-accent);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .glow-ring:hover::after {
+    opacity: 0.15;
   }
 }
 
+/* ═══════════════════════════════════════════════════════
+   LAYER 13 — Utilities & animations
+   ═══════════════════════════════════════════════════════ */
 @layer utilities {
+
+  /* Hero entrance animations */
   .animate-slide-up {
-    animation: slideUp 0.6s ease-out forwards;
+    animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   .animate-slide-up-delayed {
-    animation: slideUp 0.6s ease-out 0.15s forwards;
+    animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
     opacity: 0;
   }
 
   .animate-slide-up-delayed-2 {
-    animation: slideUp 0.6s ease-out 0.3s forwards;
+    animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
     opacity: 0;
   }
 
+  .animate-slide-up-delayed-3 {
+    animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 1s ease forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-pulse-soft {
+    animation: pulseSoft 4s ease-in-out infinite;
+  }
+
   @keyframes slideUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  @keyframes pulseSoft {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% center;
+    }
+
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  /* Carousel slide transitions */
+  .slide-enter {
+    animation: slideEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes slideEnter {
+    from {
+      opacity: 0;
+      transform: translateX(24px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 }

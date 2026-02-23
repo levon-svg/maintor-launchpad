@@ -4,6 +4,7 @@ import IntroSection from "@/components/landing/IntroSection";
 import CapabilitiesSection from "@/components/landing/CapabilitiesSection";
 import LearnBuildPlanSection from "@/components/landing/LearnBuildPlanSection";
 import GetStartedSection from "@/components/landing/GetStartedSection";
+import HandsOnSection from "@/components/landing/HandsOnSection";
 import TestimonialsSection from "@/components/landing/TestimonialsSection";
 import SafetySection from "@/components/landing/SafetySection";
 import FooterSection from "@/components/landing/FooterSection";
@@ -17,6 +18,7 @@ const Index = () => {
       <CapabilitiesSection />
       <LearnBuildPlanSection />
       <GetStartedSection />
+      <HandsOnSection />
       <TestimonialsSection />
       <SafetySection />
       <FooterSection />
